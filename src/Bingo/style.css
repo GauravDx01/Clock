@@ -1,0 +1,24 @@
+.bingo {
+    text-align: center;
+  }
+  
+  .bingo-container {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .bingo-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5px;
+  }
+  
+  .bingo-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+  }
+  

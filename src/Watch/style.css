@@ -1,0 +1,73 @@
+.container{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items:center ;
+    justify-content:center ;
+    background-color: grey;
+    flex-direction: column;
+    gap: 20px;
+}
+.clock{
+    height: 300px;
+    width: 300px;
+    background-color: rgb(229, 225, 225);border-radius: 50%;
+    position: relative;
+}
+.clock-face{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+.clock__face-mark{
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    top: 0;
+    bottom: 0;
+}
+.clock::before{
+    content: "";
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+    background-color: rgb(137, 133, 133);
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-45% , -50%);
+    z-index:99 ;
+}
+.clock__hand{
+    position: absolute;
+    top: 0;
+    left: 50;
+    bottom: 0;
+    right: 50%;
+}
+.clock__hand-body{
+   width: 2px;
+    background-color: black;
+    position: absolute;
+    top: 12%;
+    bottom: 40%;
+    border-radius: 4PX;
+}
+.clock__hand-body--hour{
+    top: 22%;
+}
+.digitalClock{
+    height: max-content;
+    width: 200px;
+    background-color: black;
+    color: rgb(213, 209, 209);
+    padding: 0 10px;
+    border-radius: 20px;
+    font-family: "Silkscreen", sans-serif;
+    display: flex;
+    align-items:center ;
+    justify-content: center;
+}
