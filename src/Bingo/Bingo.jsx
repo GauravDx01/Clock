@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import './style.css'
+
+import React, { useState, useEffect } from 'react';
+import './style.css';
+
 const generateRandomNumbers = () => {
   const numbers = [];
   while (numbers.length < 25) {
@@ -7,15 +9,11 @@ const generateRandomNumbers = () => {
     if (!numbers.includes(randomNumber)) {
       numbers.push(randomNumber);
     }
-    
   }
   return numbers;
 };
 
-
-const BingoGrid = () => {
-  const randomNumbers = generateRandomNumbers();
-  
+const BingoGrid = ({ randomNumbers }) => {
   return (
     <div className="bingo-grid">
       {randomNumbers.map((number, index) => (
@@ -28,48 +26,149 @@ const BingoGrid = () => {
 };
 
 const Bingo = () => {
+  const [currentTurn, setCurrentTurn] = useState('player1');
+  const [inputValue, setInputValue] = useState('');
+  const [randomNumbersPlayerOne, setRandomPlayerOne] = useState(generateRandomNumbers());
+  const [randomNumbersPlayerTwo, setRandomPlayerTwo] = useState(generateRandomNumbers());
+  const [playerOneLines, setPlayerOneLines] = useState(0); // Number of lines completed by Player 1
+  const [playerTwoLines, setPlayerTwoLines] = useState(0); // Number of lines completed by Player 2
+  const [playerOneEmoji, setPlayerOneEmoji] = useState('B I N G O');
+  const [playerTwoEmoji, setPlayerTwoEmoji] = useState('B I N G O');
 
-  // state of random no
-  const [playerOneTurn, setPlayerOneTurn] = useState('');
-  const [playerTwoTurn, setPlayerTwoTurn] = useState('');
-  const [randomNumbers] = useState(generateRandomNumbers());
+  useEffect(() => {
+    if (checkWinner(randomNumbersPlayerOne)) {
+      alert("Player 1 wins!");
+    }
+    if (checkWinner(randomNumbersPlayerTwo)) {
+      alert("Player 2 wins!");
+    }
+  }, [randomNumbersPlayerOne, randomNumbersPlayerTwo]);
 
   const cutNo = () => {
-    if (randomNumbers.includes(Number(playerOneTurn))) {
-      alert('Jai ho');
+    const enteredNumber = Number(inputValue);
+    if (!enteredNumber) {
+      alert("Please enter a valid number.");
+      return;
     }
+
+    const updatedPlayerOneNumbers = randomNumbersPlayerOne.map(num =>
+      num === enteredNumber ? '❌' : num
+    );
+    const updatedPlayerTwoNumbers = randomNumbersPlayerTwo.map(num =>
+      num === enteredNumber ? '❌' : num
+    );
+    setRandomPlayerOne(updatedPlayerOneNumbers);
+    setRandomPlayerTwo(updatedPlayerTwoNumbers);
+
+    setCurrentTurn(currentTurn === 'player1' ? 'player2' : 'player1');
+    setInputValue('');
   };
 
-  console.log(randomNumbers);
-  console.log(playerOneTurn);
+  const checkWinner = (randomNumbers) => {
+    const rows = [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [10, 11, 12, 13, 14], [15, 16, 17, 18, 19], [20, 21, 22, 23, 24]];
+    const columns = [[0, 5, 10, 15, 20], [1, 6, 11, 16, 21], [2, 7, 12, 17, 22], [3, 8, 13, 18, 23], [4, 9, 14, 19, 24]];
+    const diagonals = [[0, 6, 12, 18, 24], [4, 8, 12, 16, 20]];
   
-
-
+    const isBingo = (line) => {
+      let count = 0;
+      line.forEach((index) => {
+        if (randomNumbers[index] === '❌') { // Changed from 'X' to '❌'
+          count++;
+        }
+      });
+      return count === 5;
+    };
+  
+    let linesMarked = 0; // Counter to track the number of lines marked
+  
+    // Check rows
+    for (let i = 0; i < rows.length; i++) {
+      if (isBingo(rows[i])) {
+        linesMarked++;
+      }
+    }
+  
+    // Check columns
+    for (let i = 0; i < columns.length; i++) {
+      if (isBingo(columns[i])) {
+        linesMarked++;
+      }
+    }
+  
+    // Check diagonals
+    for (let i = 0; i < diagonals.length; i++) {
+      if (isBingo(diagonals[i])) {
+        linesMarked++;
+      }
+    }
+  
+    // Update the emoji for the player whose lines are marked
+    if (linesMarked == 1 && currentTurn === 'player1') {
+      setPlayerOneEmoji('✔️ I N G O');
+    } else if (linesMarked == 1 && currentTurn === 'player2') {
+      setPlayerTwoEmoji('✔️ I N G O');
+    }
+    if (linesMarked == 2 && currentTurn === 'player1') {
+      setPlayerOneEmoji('✔️ ✔️ N G O');
+    } else if (linesMarked == 2 && currentTurn === 'player2') {
+      setPlayerTwoEmoji('✔️ ✔️ N G O');
+    }
+    if (linesMarked == 3 && currentTurn === 'player1') {
+      setPlayerOneEmoji('✔️ ✔️ ✔️ G O');
+    } else if (linesMarked == 3 && currentTurn === 'player2') {
+      setPlayerTwoEmoji('✔️ ✔️ ✔️ G O');
+    }
+    if (linesMarked == 4 && currentTurn === 'player1') {
+      setPlayerOneEmoji('✔️ ✔️ ✔️ ✔️ O');
+    } else if (linesMarked == 4 && currentTurn === 'player2') {
+      setPlayerTwoEmoji('✔️ ✔️ ✔️ ✔️ O');
+    }
+    if (linesMarked == 5 && currentTurn === 'player1') {
+      setPlayerOneEmoji('✔️ ✔️ ✔️ ✔️ ✔️');
+    } else if (linesMarked == 5 && currentTurn === 'player2') {
+      setPlayerTwoEmoji('✔️ ✔️ ✔️ ✔️ ✔️');
+    }
+  
+    // Check if any player has marked 5 lines
+    if (linesMarked >= 5) {
+      return true; // Declare the winner
+    }
+  
+    return false; // No winner yet
+  };
 
   return (
     <div className="bingo">
       <h1>Bingo Grid</h1>
       <div className="bingo-container">
         <div>
-        <h1>Player 1</h1>
-        <BingoGrid />
-
+          <h1>Player 1</h1>
+          <span className='bingoName'>{playerOneEmoji}</span>
+          
+          <BingoGrid randomNumbers={randomNumbersPlayerOne} />
+          
         </div>
-        
         <div>
-        <h1>Player 1</h1>
-        <BingoGrid />
+          <h1>Player 2</h1>
+          <span>{playerTwoEmoji}</span>
+          
+          <BingoGrid randomNumbers={randomNumbersPlayerTwo} />
         </div>
-        
-        
       </div>
       <div className="turns">
-          <label htmlFor="">Player 1's turn</label>
-          <input type="text" className="turn1" value={playerOneTurn } onChange={(e)=>setPlayerOneTurn(e.target.value)}/>
-          <button onClick={cutNo}>Done</button>
-        </div>
+        <label htmlFor="">Current Turn: {currentTurn.toUpperCase()}</label>
+        <input
+          type="text"
+          className="turn"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <button onClick={cutNo}>Done</button>
+      </div>
+      
     </div>
   );
 };
 
 export default Bingo;
+
