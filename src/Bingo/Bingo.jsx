@@ -7,6 +7,7 @@ const generateRandomNumbers = () => {
     if (!numbers.includes(randomNumber)) {
       numbers.push(randomNumber);
     }
+    
   }
   return numbers;
 };
@@ -14,7 +15,7 @@ const generateRandomNumbers = () => {
 
 const BingoGrid = () => {
   const randomNumbers = generateRandomNumbers();
-
+  
   return (
     <div className="bingo-grid">
       {randomNumbers.map((number, index) => (
@@ -29,24 +30,44 @@ const BingoGrid = () => {
 const Bingo = () => {
 
   // state of random no
+  const [playerOneTurn, setPlayerOneTurn] = useState('');
+  const [playerTwoTurn, setPlayerTwoTurn] = useState('');
+  const [randomNumbers] = useState(generateRandomNumbers());
 
-const [turnNo , setTurnNo] = useState(null)
+  const cutNo = () => {
+    if (randomNumbers.includes(Number(playerOneTurn))) {
+      alert('Jai ho');
+    }
+  };
+
+  console.log(randomNumbers);
+  console.log(playerOneTurn);
+  
 
 
 
-const turnCutNo = ()=>{
-  const turnRandomNumber = Math.floor(Math.random() * 25) + 1;
-  setTurnNo(turnRandomNumber)
-}
   return (
     <div className="bingo">
       <h1>Bingo Grid</h1>
       <div className="bingo-container">
+        <div>
+        <h1>Player 1</h1>
         <BingoGrid />
+
+        </div>
+        
+        <div>
+        <h1>Player 1</h1>
         <BingoGrid />
-        <p onClick={turnCutNo}>Generate random no : {turnNo}</p>
+        </div>
+        
+        
       </div>
-   
+      <div className="turns">
+          <label htmlFor="">Player 1's turn</label>
+          <input type="text" className="turn1" value={playerOneTurn } onChange={(e)=>setPlayerOneTurn(e.target.value)}/>
+          <button onClick={cutNo}>Done</button>
+        </div>
     </div>
   );
 };
