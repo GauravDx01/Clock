@@ -34,15 +34,20 @@ const Bingo = () => {
   const [playerTwoLines, setPlayerTwoLines] = useState(0); // Number of lines completed by Player 2
   const [playerOneEmoji, setPlayerOneEmoji] = useState('B I N G O');
   const [playerTwoEmoji, setPlayerTwoEmoji] = useState('B I N G O');
+  const [winnerDeclared, setWinnerDeclared] = useState(false); // Track if a winner has been declared
 
   useEffect(() => {
-    if (checkWinner(randomNumbersPlayerOne)) {
+    if (!winnerDeclared && checkWinner(randomNumbersPlayerOne, playerOneLines, setPlayerOneLines, setPlayerOneEmoji)) {
       alert("Player 1 wins!");
+      setWinnerDeclared(true); 
+      window.location.reload()
     }
-    if (checkWinner(randomNumbersPlayerTwo)) {
+    if (!winnerDeclared && checkWinner(randomNumbersPlayerTwo, playerTwoLines, setPlayerTwoLines, setPlayerTwoEmoji)) {
       alert("Player 2 wins!");
+      setWinnerDeclared(true); 
+      window.location.reload()
     }
-  }, [randomNumbersPlayerOne, randomNumbersPlayerTwo]);
+  }, [randomNumbersPlayerOne, randomNumbersPlayerTwo, playerOneLines, playerTwoLines, winnerDeclared]);
 
   const cutNo = () => {
     const enteredNumber = Number(inputValue);
@@ -64,15 +69,12 @@ const Bingo = () => {
     setInputValue('');
   };
 
-  const checkWinner = (randomNumbers) => {
-    const rows = [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [10, 11, 12, 13, 14], [15, 16, 17, 18, 19], [20, 21, 22, 23, 24]];
-    const columns = [[0, 5, 10, 15, 20], [1, 6, 11, 16, 21], [2, 7, 12, 17, 22], [3, 8, 13, 18, 23], [4, 9, 14, 19, 24]];
-    const diagonals = [[0, 6, 12, 18, 24], [4, 8, 12, 16, 20]];
-  
+  const checkWinner = (randomNumbers, playerLines, setPlayerLines, setPlayerEmoji) => {
+    // Define the function to check if a line is marked
     const isBingo = (line) => {
       let count = 0;
       line.forEach((index) => {
-        if (randomNumbers[index] === '❌') { // Changed from 'X' to '❌'
+        if (randomNumbers[index] === '❌') {
           count++;
         }
       });
@@ -81,52 +83,55 @@ const Bingo = () => {
   
     let linesMarked = 0; // Counter to track the number of lines marked
   
-    // Check rows
+    // Define rows, columns, and diagonals
+    const rows = [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [10, 11, 12, 13, 14], [15, 16, 17, 18, 19], [20, 21, 22, 23, 24]];
+    const columns = [[0, 5, 10, 15, 20], [1, 6, 11, 16, 21], [2, 7, 12, 17, 22], [3, 8, 13, 18, 23], [4, 9, 14, 19, 24]];
+    const diagonals = [[0, 6, 12, 18, 24], [4, 8, 12, 16, 20]];
+  
+    // Check rows, columns, and diagonals for marked lines
     for (let i = 0; i < rows.length; i++) {
       if (isBingo(rows[i])) {
         linesMarked++;
       }
-    }
-  
-    // Check columns
-    for (let i = 0; i < columns.length; i++) {
       if (isBingo(columns[i])) {
         linesMarked++;
       }
-    }
-  
-    // Check diagonals
-    for (let i = 0; i < diagonals.length; i++) {
-      if (isBingo(diagonals[i])) {
+      if (i < diagonals.length && isBingo(diagonals[i])) {
         linesMarked++;
       }
     }
   
+    // Define emojis for each stage of completion
+    const emojis = ['✔️', '✔️✔️', '✔️✔️✔️', '✔️✔️✔️✔️', '✔️✔️✔️✔️✔️'];
+  
     // Update the emoji for the player whose lines are marked
-    if (linesMarked == 1 && currentTurn === 'player1') {
-      setPlayerOneEmoji('✔️ I N G O');
-    } else if (linesMarked == 1 && currentTurn === 'player2') {
-      setPlayerTwoEmoji('✔️ I N G O');
-    }
-    if (linesMarked == 2 && currentTurn === 'player1') {
-      setPlayerOneEmoji('✔️ ✔️ N G O');
-    } else if (linesMarked == 2 && currentTurn === 'player2') {
-      setPlayerTwoEmoji('✔️ ✔️ N G O');
-    }
-    if (linesMarked == 3 && currentTurn === 'player1') {
-      setPlayerOneEmoji('✔️ ✔️ ✔️ G O');
-    } else if (linesMarked == 3 && currentTurn === 'player2') {
-      setPlayerTwoEmoji('✔️ ✔️ ✔️ G O');
-    }
-    if (linesMarked == 4 && currentTurn === 'player1') {
-      setPlayerOneEmoji('✔️ ✔️ ✔️ ✔️ O');
-    } else if (linesMarked == 4 && currentTurn === 'player2') {
-      setPlayerTwoEmoji('✔️ ✔️ ✔️ ✔️ O');
-    }
-    if (linesMarked == 5 && currentTurn === 'player1') {
-      setPlayerOneEmoji('✔️ ✔️ ✔️ ✔️ ✔️');
-    } else if (linesMarked == 5 && currentTurn === 'player2') {
-      setPlayerTwoEmoji('✔️ ✔️ ✔️ ✔️ ✔️');
+    if (linesMarked > playerLines) {
+      if(linesMarked===1 && playerLines===0){
+        setPlayerLines(linesMarked);
+        setPlayerEmoji(emojis[linesMarked - 1] + ' I N G O');
+        
+      }
+      if(linesMarked===2 && playerLines===1){
+        setPlayerLines(linesMarked);
+        setPlayerEmoji(emojis[linesMarked - 1] + '  N G O');
+        
+      }
+      if(linesMarked===3 && playerLines===2){
+        setPlayerLines(linesMarked);
+        setPlayerEmoji(emojis[linesMarked - 1] + 'G O');
+        
+      }
+      if(linesMarked===4 && playerLines===3){
+        setPlayerLines(linesMarked);
+        setPlayerEmoji(emojis[linesMarked - 1] + 'O');
+        
+      }
+      if(linesMarked===5 && playerLines===4){
+        setPlayerLines(linesMarked);
+        setPlayerEmoji(emojis[linesMarked - 1] + '');
+        
+      }
+      
     }
   
     // Check if any player has marked 5 lines
@@ -150,7 +155,7 @@ const Bingo = () => {
         </div>
         <div>
           <h1>Player 2</h1>
-          <span>{playerTwoEmoji}</span>
+          <span className='bingoName'>{playerTwoEmoji}</span>
           
           <BingoGrid randomNumbers={randomNumbersPlayerTwo} />
         </div>

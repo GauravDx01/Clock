@@ -1,46 +1,76 @@
 .bingo {
-    text-align: center;
-  }
-  
-  .bingo-container {
-    display: flex;
-    justify-content: space-around;
-  }
-  
-  .bingo-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 5px;
-  }
-  
-  .bingo-cell {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-    height: 50px;
-    border: 1px solid black;
-  }
-  .cross{
-    height: 100%;
-    width: 100%;
-    color: aliceblue;
-    background-color: red;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .bingo{
-    font-size: 25px;
-    
-  }
-  .bingoName{
-    letter-spacing: 19px;
-    text-align: center;
-    display: flex;
-    align-items:center ;
-    justify-content:center ;
-    font-weight: bold;
-  }
+  text-align: center;
+  height: 100vh;
+  width: 100%;
+  background-image: url("https://media.istockphoto.com/id/1199123191/photo/realisic-3d-lottery-balls-with-sign-bingo.jpg?s=2048x2048&w=is&k=20&c=WhWg5VcDW4T-nGuG2mtcddT-Aemjh6rb5baIrEZEo7Q=");
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: aliceblue;
+}
 
-  
+.bingo-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.bingo-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 5px;
+}
+
+.bingo-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border: 1px solid rgb(216, 198, 198);
+}
+.cross {
+  height: 100%;
+  width: 100%;
+  color: aliceblue;
+  background-color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bingo {
+  font-size: 25px;
+}
+.bingoName {
+  letter-spacing: 19px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  padding-left: 10px;
+}
+.turns input{
+  height: 30px;
+  width: 140px;
+  font-size: 20px;
+  border: none;
+  /* gap: 2px; */
+  border-radius: 4px 0px 0px 4px ;
+}
+.turns{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+.turns button{
+  height: 32px;
+  width: 80px;
+  color: #fff;
+  background-color: black;
+  border: none;
+  gap: 2px;
+  font-size: 18px;
+  font-weight: 500;
+
+  border-radius: 0px 4px 4px 0px ;
+}
